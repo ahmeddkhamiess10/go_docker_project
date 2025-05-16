@@ -6,6 +6,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - back_net
 
   db:
     image: mysql:8
@@ -14,10 +16,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: yourpassword
       MYSQL_DATABASE: example  
+    networks:
+      - back_net
+
+
     
     
   nginx:
-    image: nginx
+    image: nginx:alpine
     ports:
       - "443:443"
     volumes:
@@ -26,3 +32,13 @@ services:
 
     depends_on:
       - go-app
+    networks:
+      - front_net
+      - back_net
+networks:
+  back_net:
+    internal: true
+
+  front_net:
+      
+  
