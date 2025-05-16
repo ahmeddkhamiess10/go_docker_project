@@ -1,11 +1,20 @@
 services:
   go-app:
-    image: go_image:3.0
+    image: go_image:3.2
+
     container_name: go-app
+
     ports:
       - "8000:8000"
+
     depends_on:
       - db
+
+    environment:
+      DB_PASSWORD: yourpassword
+      DB_HOST: db
+      DB_NAME: example
+
     networks:
       - back_net
 

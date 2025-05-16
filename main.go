@@ -4,24 +4,28 @@ import (
         "database/sql"
         "encoding/json"
         "fmt"
-        "io/ioutil"
+        // "io/ioutil"
         "log"
         "net/http"
         "os"
         "time"
-        "strings"
+        // "strings"
         _ "github.com/go-sql-driver/mysql"
         "github.com/gorilla/handlers"
         "github.com/gorilla/mux"
 )
 
 func connect() (*sql.DB, error) {
-        bin, err := ioutil.ReadFile("/run/secrets/db-password")
-        if err != nil {
-                return nil, err
-        }
-        password := strings.TrimSpace(string(bin))
-        return sql.Open("mysql", fmt.Sprintf("root:%s@tcp(db:3306)/example", password))
+	password := os.Getenv("DB_PASSWORD")
+	host := os.Getenv("DB_HOST")
+	database := os.Getenv("DB_NAME") // optional, for flexibility
+
+	if password == "" || host == "" {
+		return nil, fmt.Errorf("missing DB credentials")
+	}
+
+	dsn := fmt.Sprintf("root:%s@tcp(%s:3306)/%s", password, host, database)
+	return sql.Open("mysql", dsn)
 }
 
 func blogHandler(w http.ResponseWriter, r *http.Request) {
