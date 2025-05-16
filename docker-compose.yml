@@ -1,6 +1,6 @@
 services:
   go-app:
-    build: .
+    image: go_image:3.0
     container_name: go-app
     ports:
       - "8000:8000"
@@ -16,3 +16,13 @@ services:
       MYSQL_DATABASE: example  
     
     
+  nginx:
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx_certificates:/etc/nginx/certs
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    depends_on:
+      - go-app
