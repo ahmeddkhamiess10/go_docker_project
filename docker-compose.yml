@@ -1,6 +1,6 @@
 services:
   go-app:
-    image: go_image:3.2
+    image: go_image:3.3
 
     container_name: go-app
 
